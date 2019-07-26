@@ -1,0 +1,7 @@
+build/*.o
+build/*.d
+TAGS
+tags
+compile_commands.json
+bios.bin
+emul
