@@ -7,7 +7,7 @@ _HDR = $(HDR) $(wildcard include/*.h)
 _OBJ = $(subst src, build, $(_SRC:.c=.o))
 DEP =  $(subst src, build, $(_SRC:.c=.d))
 
-all: $(PRE) $(DEP) $(_OBJ) $(OUT)
+all: $(PRE) $(DEP) $(_OBJ) $(OUT) gener.mk Makefile
 
 define prettify =
 	$(Q)for file in $(2) ; do printf "%5s\t%s%s\n" $(1) $(PREF) $$file ; done

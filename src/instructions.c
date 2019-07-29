@@ -53,8 +53,29 @@ op_sw(uint8_t rs, uint8_t rt, uint16_t imm)
 	mem_setw(cpu.r[rs] + sext16(imm), cpu.r[rt]);
 }
 
+static void
+op_special(uint8_t rs, uint8_t rt, uint8_t rd, uint8_t shamt, uint8_t func)
+{
+	enum {
+		FUNC_SLL = 0,
+		FUNC_SRL = 2,
+		FUNC_SRA = 3,
+		/*TODO*/
+	};
+
+	switch (func) {
+	case FUNC_SLL:
+		cpu.r[rd] = cpu.r[rt] << shamt;
+		break;
+	default:
+		printf("TODO func 0x%x\n", func);
+		exit(1);
+	}
+}
+
+
 struct instruction instrs[64] = {
-	[0x00] = { "SPECIAL",	J_TYPE,	{ .j_type = todo	}},
+	[0x00] = { "SPECIAL",	R_TYPE,	{ .r_type = op_special	}},
 	[0x01] = { "BCOND",	J_TYPE, { .j_type = todo	}},
 	[0x02] = { "J",		J_TYPE, { .j_type = todo	}},
 	[0x03] = { "JAL",	J_TYPE, { .j_type = todo	}},

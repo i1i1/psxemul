@@ -1,5 +1,5 @@
 CC = gcc -std=c99
-CFLAGS = -Wall -Wextra -ggdb -Iinclude
+CFLAGS = -Wall -Wextra -ggdb -Iinclude -O3
 LDFLAGS =
 
 OUT = emul

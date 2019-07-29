@@ -21,8 +21,8 @@ static inline void mem_seth(uint32_t addr, uint16_t h) {
 }
 
 static inline void mem_setw(uint32_t addr, uint32_t w) {
-	mem_setb(addr, w & 0xffff);
-	mem_setb(addr+2, w >> 16);
+	mem_seth(addr, w & 0xffff);
+	mem_seth(addr+2, w >> 16);
 }
 
 uint8_t mem_getb(uint32_t addr);
