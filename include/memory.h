@@ -1,40 +1,46 @@
 #ifndef _MEMORY_H_
 #define _MEMORY_H_
 
-#include <stdint.h>
+#include "macro.h"
+#include "types.h"
+
 
 struct memory {
-	uint8_t bios[512 * 1024];
-	uint8_t user_mem[0x00200000 - 0x00010000];
+	u8 bios[512 * 1024];
+	u8 user_mem[0x00200000 - 0x00010000];
 };
+
 
 extern struct memory mem;
 
 
 void mem_init(void);
 
-void mem_setb(uint32_t addr, uint8_t b);
+void mem_setb(u32 addr, u8 b);
 
-static inline void mem_seth(uint32_t addr, uint16_t h) {
-	mem_setb(addr, h & 0xff);
+u8 mem_getb(u32 addr);
+
+void load_bios(char *s, struct memory *mem);
+
+
+static inline void mem_seth(u32 addr, u16 h) {
+	mem_setb(addr, h & MASK(8));
 	mem_setb(addr+1, h >> 8);
 }
 
-static inline void mem_setw(uint32_t addr, uint32_t w) {
-	mem_seth(addr, w & 0xffff);
+static inline void mem_setw(u32 addr, u32 w) {
+	mem_seth(addr, w & MASK(16));
 	mem_seth(addr+2, w >> 16);
 }
 
-uint8_t mem_getb(uint32_t addr);
-
-static inline uint16_t mem_geth(uint32_t addr) {
-	return ((uint16_t)mem_getb(addr)) |
-		((uint16_t)mem_getb(addr+1) << 8);
+static inline u16 mem_geth(u32 addr) {
+	return ((u16)mem_getb(addr)) |
+		((u16)mem_getb(addr+1) << 8);
 }
 
-static inline uint32_t mem_getw(uint32_t addr) {
-	return ((uint32_t)mem_geth(addr)) |
-		((uint32_t)mem_geth(addr+2) << 16);
+static inline u32 mem_getw(u32 addr) {
+	return ((u32)mem_geth(addr)) |
+		((u32)mem_geth(addr+2) << 16);
 }
 
 #endif /* _MEMORY_H_ */

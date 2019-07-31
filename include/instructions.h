@@ -1,7 +1,7 @@
 #ifndef _INSTRUCTIONS_H_
 #define _INSTRUCTIONS_H_
 
-#include <stdint.h>
+#include "types.h"
 
 
 struct instruction {
@@ -14,9 +14,9 @@ struct instruction {
 	} type;
 
 	union {
-		void (*j_type)(uint32_t target);
-		void (*i_type)(uint8_t rs, uint8_t rt, uint16_t imm);
-		void (*r_type)(uint8_t rs, uint8_t rt, uint8_t rd, uint8_t shamt, uint8_t func);
+		void (*j_type)(u32 target);
+		void (*i_type)(u8 rs, u8 rt, u16 imm);
+		void (*r_type)(u8 rs, u8 rt, u8 rd, u8 shamt, u8 func);
 	} f;
 };
 

@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "types.h"
+#include "macro.h"
+
 #include "cpu.h"
 #include "memory.h"
 #include "instructions.h"
+
 
 struct cpu cpu;
 
@@ -17,36 +21,38 @@ cpu_init()
 void
 cpu_iter()
 {
-	uint32_t inst = mem_getw(cpu.pc);
-	uint32_t op = inst >> 26;
+	u32 inst = mem_getw(cpu.pc);
+	u32 op = inst >> 26;
 
 	cpu.ir = inst;
 
+	printf("%x:\t%x\t%s\t", cpu.pc, inst, instrs[op].nm);
+
 	switch (instrs[op].type) {
 	case J_TYPE: {
-		uint32_t target = inst & 0x03ffffff;  // Last 6 bits are opcode
+		u32 target = inst & MASK(26);
 
-		printf("%p:\t%p\t%s\t%p\n", (void *)(size_t)cpu.pc, (void *)(size_t)inst, instrs[op].nm, (void *)(size_t)target);
+		printf("0x%x\n", target);
 		instrs[op].f.j_type(target);
 		break;
 	}
 	case I_TYPE: {
-		uint8_t  rs  = (inst >> 21) & 0x1f;
-		uint8_t  rt  = (inst >> 16) & 0x1f;
-		uint16_t imm = (inst >>  0) & 0xffff;
+		u8  rs  = (inst >> 21) & MASK(5);
+		u8  rt  = (inst >> 16) & MASK(5);
+		u16 imm = (inst >>  0) & MASK(16);
 
-		printf("%p:\t%p\t%s\t%d, %d, %d\n", (void *)(size_t)cpu.pc, (void *)(size_t)inst, instrs[op].nm, rs, rt, imm);
+		printf("0x%x, 0x%x, 0x%x\n", rs, rt, imm);
 		instrs[op].f.i_type(rs, rt, imm);
 		break;
 	}
 	case R_TYPE: {
-		uint8_t rs    = (inst >> 21) & 0x1f;
-		uint8_t rt    = (inst >> 16) & 0x1f;
-		uint8_t rd    = (inst >> 11) & 0x1f;
-		uint8_t shamt = (inst >>  6) & 0x1f;
-		uint8_t func  = (inst >>  0) & 0x3f;
+		u8 rs    = (inst >> 21) & MASK(5);
+		u8 rt    = (inst >> 16) & MASK(5);
+		u8 rd    = (inst >> 11) & MASK(5);
+		u8 shamt = (inst >>  6) & MASK(5);
+		u8 func  = (inst >>  0) & MASK(6);
 
-		printf("%p:\t%p\t%s\t%d, %d, %d, %d, %d\n", (void *)(size_t)cpu.pc, (void *)(size_t)inst, instrs[op].nm, rs, rt, rd, shamt, func);
+		printf("0x%x, 0x%x, 0x%x, 0x%x, 0x%x\n", rs, rt, rd, shamt, func);
 		instrs[op].f.r_type(rs, rt, rd, shamt, func);
 		break;
 	}

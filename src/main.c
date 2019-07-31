@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "types.h"
+
 #include "cpu.h"
 
 
@@ -11,18 +13,6 @@ void
 help(char *cmd)
 {
 	printf(help_message, cmd);
-}
-
-void
-load_bios(char *s, struct memory *mem)
-{
-	FILE *fp = fopen(s, "r");
-
-	if (!fp)
-		exit(1);
-
-	fread(mem->bios, sizeof(mem->bios), 1, fp);
-	fclose(fp);
 }
 
 int

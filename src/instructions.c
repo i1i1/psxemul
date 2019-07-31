@@ -1,40 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "macro.h"
+#include "types.h"
+
 #include "cpu.h"
 #include "memory.h"
 #include "instructions.h"
 
 /*
-void (*i_type)(uint8_t rs, uint8_t rt, uint16_t imm);
-void (*j_type)(uint32_t target);
-void (*r_type)(uint8_t rs, uint8_t rt, uint8_t rd, uint8_t shamt, uint8_t func);
+void (*i_type)(u8 rs, u8 rt, u16 imm);
+void (*j_type)(u32 target);
+void (*r_type)(u8 rs, u8 rt, u8 rd, u8 shamt, u8 func);
 */
 
 static int
-sext16(uint16_t h)
+sext16(u16 h)
 {
 	return (int16_t)h;
 }
 
 static void 
-todo(uint32_t target)
+todo(u32 target)
 {
     (void)target;
-    printf("TODO ir = %p!\n", (void *)(size_t)(cpu.ir));
-    exit(1);
+    die("TODO ir = 0x%x!\n", cpu.ir);
 }
 
 static void 
-unknown(uint32_t target)
+unknown(u32 target)
 {
     (void)target;
-    printf("UNKNOWN ir = %p!\n", (void *)(size_t)(cpu.ir));
-    exit(1);
+    die("Unknown ir = 0x%x!\n", cpu.ir);
 }
 
 static void
-op_lui(uint8_t rs, uint8_t rt, uint16_t imm)
+op_lui(u8 rs, u8 rt, u16 imm)
 {
 	(void) rs;
 
@@ -42,20 +43,22 @@ op_lui(uint8_t rs, uint8_t rt, uint16_t imm)
 }
 
 static void
-op_ori(uint8_t rs, uint8_t rt, uint16_t imm)
+op_ori(u8 rs, u8 rt, u16 imm)
 {
 	cpu.r[rt] = cpu.r[rs] | imm;
 }
 
 static void
-op_sw(uint8_t rs, uint8_t rt, uint16_t imm)
+op_sw(u8 rs, u8 rt, u16 imm)
 {
 	mem_setw(cpu.r[rs] + sext16(imm), cpu.r[rt]);
 }
 
 static void
-op_special(uint8_t rs, uint8_t rt, uint8_t rd, uint8_t shamt, uint8_t func)
+op_special(u8 rs, u8 rt, u8 rd, u8 shamt, u8 func)
 {
+	(void) rs;
+
 	enum {
 		FUNC_SLL = 0,
 		FUNC_SRL = 2,
@@ -68,16 +71,23 @@ op_special(uint8_t rs, uint8_t rt, uint8_t rd, uint8_t shamt, uint8_t func)
 		cpu.r[rd] = cpu.r[rt] << shamt;
 		break;
 	default:
-		printf("TODO func 0x%x\n", func);
-		exit(1);
+		die("TODO func 0x%x\n", func);
 	}
+}
+
+static void
+op_j(u32 target)
+{
+	printf("\tpc = 0x%x\n", cpu.pc);
+	cpu.pc = (cpu.pc & (MASK(6) << 26)) | target;
+	printf("\tpc = 0x%x\n", cpu.pc);
 }
 
 
 struct instruction instrs[64] = {
 	[0x00] = { "SPECIAL",	R_TYPE,	{ .r_type = op_special	}},
 	[0x01] = { "BCOND",	J_TYPE, { .j_type = todo	}},
-	[0x02] = { "J",		J_TYPE, { .j_type = todo	}},
+	[0x02] = { "J",		J_TYPE, { .j_type = op_j	}},
 	[0x03] = { "JAL",	J_TYPE, { .j_type = todo	}},
 	[0x04] = { "BEQ",	J_TYPE, { .j_type = todo	}},
 	[0x05] = { "BNE",	J_TYPE, { .j_type = todo	}},

@@ -1,18 +1,18 @@
 #ifndef _CPU_H_
 #define _CPU_H_
 
-#include <stdint.h>
+#include "types.h"
 
 #include "memory.h"
 
-#define RESET_ADDR	0xbfc00000
+#define RESET_ADDR	0xbfc00000ul
 
 struct cpu {
-	uint32_t r[32];
-	uint32_t hi;
-	uint32_t lo;
-	uint32_t pc;
-	uint32_t ir;
+	u32 r[32];
+	u32 hi;
+	u32 lo;
+	u32 pc;
+	u32 ir;
 };
 
 extern struct cpu cpu;
