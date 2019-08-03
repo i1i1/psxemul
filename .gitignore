@@ -1,7 +1,8 @@
-build/*.o
-build/*.d
+build/*
 TAGS
 tags
 compile_commands.json
 bios.bin
 emul
+generated.mk
+.list
