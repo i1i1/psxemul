@@ -17,25 +17,9 @@ DEPS := $(addprefix build/, $(SRC:.c=.d))
 OBJ  := $(addprefix build/, $(SRC:.c=.o))
 DIRS := $(shell echo $(foreach o,$(OBJ),$(shell dirname $(o))) | tr ' ' '\n'|sort|uniq|xargs echo)
 
-$(MK): $(VARS) Makefile .list
-	@echo REGENERATING $(MK)
+$(MK): $(VARS) Makefile $(HELPERS) .list
 	@rm -f $(MK)
-	@echo "include"  $(HELPERS)  >> $(MK)
-	@echo "-include" $(VARS)     >> $(MK)
-	@echo                        >> $(MK)
-	$(call gener_vars)
-	@echo                        >> $(MK)
-	$(call gener_out)
-	@echo                        >> $(MK)
-	@echo "ifneq \"\$$(MAKECMDGOALS)\" \"dirs\"">> $(MK)
-	@echo "-include \$$(DEPS)"   >> $(MK)
-	@echo "endif"                >> $(MK)
-	@echo                        >> $(MK)
-	$(call gener_dirs)
-	@echo                        >> $(MK)
-	$(call gener_srcs)
-	@echo                        >> $(MK)
-	@echo ".PHONY: all dirs deps">> $(MK)
+	$(call gener_file, $(MK), $(HELPERS), $(VARS))
 
 .list:
 	@if [ "$$(cat .list)" != "$(SRC) $(HDR)"  ]; then \
@@ -53,5 +37,5 @@ clean:
 	@$(MAKE) -f $(MK) -j$(JOBS) $(MAKECMDGOALS)
 
 
-.PHONY: all fullclean
+.PHONY: all fullclean .list
 
