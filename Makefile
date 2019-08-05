@@ -22,7 +22,7 @@ $(MK): $(VARS) Makefile $(HELPERS) .list
 	$(call gener_file, $(MK), $(HELPERS), $(VARS))
 
 .list:
-	@if [ "$$(cat .list)" != "$(SRC) $(HDR)"  ]; then \
+	@if [ "$$(cat .list || echo -n)" != "$(SRC) $(HDR)"  ]; then \
 		echo "$(SRC) $(HDR)" >.list;\
 	fi
 

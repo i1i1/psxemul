@@ -64,12 +64,12 @@ define gener_out =
 	@echo "all: \$$(DIRS) \$$(OUT)"   >>$(MK)
 	@echo                             >>$(MK)
 	@echo "deps: \$$(DEPS)"           >>$(MK)
-	@echo -e "\t@true"                >>$(MK)
+	@printf "\t@true\n"               >>$(MK)
 	@echo                             >>$(MK)
 	@echo "dirs: \$$(DIRS)"           >>$(MK)
 	@echo                             >>$(MK)
 	@echo "\$$(OUT): \$$(OBJ)"        >>$(MK)
-	@echo -e "\t\$$(call gener_ld, \$$^, \$$@)">>$(MK)
+	@printf "\t\$$(call gener_ld, \$$^, \$$@)\n">>$(MK)
 	@echo                             >>$(MK)
 endef
 

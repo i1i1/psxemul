@@ -26,13 +26,13 @@ cpu_iter()
 
 	cpu.ir = inst;
 
-	printf("%x:\t%x\t%s\t", cpu.pc, inst, instrs[op].nm);
+	printf("%08x:\t%08x\t%s\t", cpu.pc, inst, instrs[op].nm);
 
 	switch (instrs[op].type) {
 	case J_TYPE: {
 		u32 target = inst & MASK(26);
 
-		printf("0x%x\n", target);
+		printf("0x%08x\n", target);
 		instrs[op].f.j_type(target);
 		break;
 	}
