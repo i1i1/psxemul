@@ -82,7 +82,8 @@ op_special(u8 rs, u8 rt, u8 rd, u8 shamt, u8 func)
 static void
 op_j(u32 target)
 {
-	cpu.pc = (cpu.pc & (MASK(4) << 28)) | (target << 2);
+	cpu.pc &= MASK_BITS(32, 28);
+	cpu.pc |= (target << 2);
 }
 
 /*

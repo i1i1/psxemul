@@ -22,7 +22,7 @@ struct memory {
 	struct mmc2 {
 		u32 RAM_Size;  // 1F801060h RAM_SIZE (usually 00000B88h; 2MB RAM mirrored in first 8MB)
 	} mmc2;
-	u32 cache;
+	u32 cache_ctl;
 };
 
 

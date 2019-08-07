@@ -91,16 +91,16 @@ mem_setb_memc2(u32 off, u8 val)
 }
 
 static u8
-mem_getb_cache(u32 off)
+mem_getb_cache_ctl(u32 off)
 {
-	return mem.cache >> (8 * off);
+	return mem.cache_ctl >> (8 * off);
 }
 
 static void
-mem_setb_cache(u32 off, u8 val)
+mem_setb_cache_ctl(u32 off, u8 val)
 {
-	mem.cache &= ~(MASK(8) << (off * 8));
-	mem.cache |= (val << (off * 8));
+	mem.cache_ctl &= ~(MASK(8) << (off * 8));
+	mem.cache_ctl |= (val << (off * 8));
 }
 
 static struct region mmap[] = {
@@ -108,7 +108,7 @@ static struct region mmap[] = {
 	{ 0x1f801000, 0x1f801024, mem_getb_memc1,	mem_setb_memc1    },
 	{ 0x1f801060, 0x1f801064, mem_getb_memc2,	mem_setb_memc2    },
 	{ 0xbfc00000, 0xbfc80000, mem_getb_bios,	mem_setb_bios     },
-	{ 0xfffe0130, 0xfffe0134, mem_getb_cache,	mem_setb_cache    },
+	{ 0xfffe0130, 0xfffe0134, mem_getb_cache_ctl,	mem_setb_cache_ctl},
 };
 
 u8
