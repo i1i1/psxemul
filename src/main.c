@@ -7,30 +7,30 @@
 
 
 char *help_message =
-	"%s [bios] [game]\n";
+    "%s [bios] [game]\n";
 
 void
 help(char *cmd)
 {
-	printf(help_message, cmd);
+    printf(help_message, cmd);
 }
 
 int
 main(int argc, char **argv)
 {
-	if (argc < 2) {
-		help(argv[0]);
-		return 1;
-	}
+    if (argc < 2) {
+        help(argv[0]);
+        return 1;
+    }
 
-	mem_init();
-	cpu_init();
+    mem_init();
+    cpu_init();
 
-	load_bios(argv[1], &mem);
+    load_bios(argv[1], &mem);
 
-	for (;;) {
-		cpu_iter();
-	}
+    for (;;) {
+        cpu_iter();
+    }
 
-	return 0;
+    return 0;
 }

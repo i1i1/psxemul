@@ -9,6 +9,8 @@ JOBS:=8
 
 BIOS:=bios.bin
 
+all:
+
 test: all
 	./$(OUT) $(BIOS)
 

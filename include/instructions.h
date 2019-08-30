@@ -5,19 +5,19 @@
 
 
 struct instruction {
-	char *nm;
+    char *nm;
 
-	enum type {
-		I_TYPE,
-		J_TYPE,
-		R_TYPE,
-	} type;
+    enum type {
+        I_TYPE,
+        J_TYPE,
+        R_TYPE,
+    } type;
 
-	union {
-		void (*j_type)(u32 target);
-		void (*i_type)(u8 rs, u8 rt, u16 imm);
-		void (*r_type)(u8 rs, u8 rt, u8 rd, u8 shamt, u8 func);
-	} f;
+    union {
+        void (*j_type)(u32 target);
+        void (*i_type)(u8 rs, u8 rt, u16 imm);
+        void (*r_type)(u8 rs, u8 rt, u8 rd, u8 shamt, u8 func);
+    } f;
 };
 
 extern struct instruction instrs[64];

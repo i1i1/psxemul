@@ -5,14 +5,14 @@
 
 #include "memory.h"
 
-#define RESET_ADDR	0xbfc00000ul
+#define RESET_ADDR    0xbfc00000ul
 
 struct cpu {
-	u32 r[32];
-	u32 hi;
-	u32 lo;
-	u32 pc;
-	u32 ir;
+    u32 r[32];
+    u32 hi;
+    u32 lo;
+    u32 pc;
+    u32 ir;
 };
 
 extern struct cpu cpu;

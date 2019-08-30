@@ -1,19 +1,21 @@
 VARS  := variables.mk
-GENER := ./gener.py
+GENER := ./gener.sh
 MK    := generated.mk
 
-BUILD ?= ./build/
+BUILD ?= build
 
-include $(HELPERS)
 
-all: mk_list $(MK)
+all: gener_mk
 	@make -f $(MK) -j$(JOBS)
+
+gener_mk: mk_list $(MK)
 
 -include $(VARS)
 
 
 $(MK): $(VARS) Makefile .list $(GENER)
-	@$(GENER) --vars $(VARS) --build $(BUILD) -o $(MK) $(SRC)
+	@printf "%-5s %s\n" REGEN $(MK)
+	@BUILD=$(BUILD) VARS=$(VARS) $(GENER) $(SRC) > $(MK)
 
 mk_list:
 	@if [ "$$(cat .list 2>/dev/null || echo -n)" != "$(SRC) $(HDR)"  ]; then \
@@ -25,12 +27,12 @@ fullclean: clean
 	@rm -f .list
 
 clean: userclean
-	@rm -rf build/
+	@rm -rf $(BUILD)
 	@rm -f $(OUT)
 
 %:
 	@make -f $(MK) -j$(JOBS) $(MAKECMDGOALS)
 
 
-.PHONY: all fullclean mk_list userclean
+.PHONY: all gener_mk fullclean mk_list userclean
 

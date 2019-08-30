@@ -28,4 +28,4 @@
 
 #define die(args...) do { fprintf(stderr, args); exit(1); } while (0)
 
-#endif /* _TYPES_H_ */
+#endif /* _MACRO_H_ */
