@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "types.h"
-#include "macro.h"
+#include "utils.h"
 
 #include "memory.h"
 
@@ -118,7 +118,9 @@ mem_getb(u32 addr)
         if (mmap[i].start <= addr && addr < mmap[i].end)
             return mmap[i].getb(addr-mmap[i].start);
     }
-    die("\tUnknown address: 0x%08x\n", addr);
+    die("Unknown address: 0x%08x", addr);
+    /* remove warning */
+    return 0;
 }
 
 void
@@ -130,7 +132,7 @@ mem_setb(u32 addr, u8 b)
             return;
         }
     }
-    die("\tUnknown address: 0x%08x\n", addr);
+    die("Unknown address: 0x%08x", addr);
 }
 
 void

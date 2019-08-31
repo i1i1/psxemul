@@ -24,8 +24,6 @@
 #define _STRINGIFY(a) #a
 #define STRINGIFY(a) _STRINGIFY(a)
 
-#include <stdio.h>
-
-#define die(args...) do { fprintf(stderr, args); exit(1); } while (0)
+#include <string.h>
 
 #endif /* _MACRO_H_ */

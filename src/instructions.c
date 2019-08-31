@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "macro.h"
+#include "utils.h"
 #include "types.h"
 
 #include "cpu.h"
@@ -24,14 +24,14 @@ static void
 todo(u32 target)
 {
     (void)target;
-    die("TODO ir = 0x%x! id = 0x%x \"%s\"\n", cpu.ir, cpu.ir >> 26, instrs[cpu.ir >> 26].nm);
+    die("TODO ir = 0x%x! id = 0x%x \"%s\"", cpu.ir, cpu.ir >> 26, instrs[cpu.ir >> 26].nm);
 }
 
 static void 
 unknown(u32 target)
 {
     (void)target;
-    die("Unknown ir = 0x%x!\n", cpu.ir);
+    die("Unknown ir = 0x%x!", cpu.ir);
 }
 
 static void
@@ -75,7 +75,7 @@ op_special(u8 rs, u8 rt, u8 rd, u8 shamt, u8 func)
         cpu.r[rd] = cpu.r[rt] | cpu.r[rs];
         break;
     default:
-        die("TODO func 0x%x\n", func);
+        die("TODO func 0x%x", func);
     }
 }
 
@@ -93,6 +93,53 @@ static void
 op_addiu(u8 rs, u8 rt, u16 imm)
 {
     cpu.r[rs] = cpu.r[rt] + sext16(imm);
+}
+
+static void
+op_cop0(u32 rest)
+{
+    enum {
+        MFC0 = 0,
+        CFC0 = 2,
+        MTC0 = 4,
+        CTC0 = 6,
+        BC   = 8,
+    };
+
+    int bit  = rest & BIT(25);
+    int type = (rest >> 21) & MASK(4);
+
+    if (bit)
+        die("Tables todo!");
+
+#define TODO(CS) case CS: \
+    die("cop0 todo type '%s' %d", STRINGIFY(CS), CS); \
+    break;
+
+    switch (type) {
+    TODO(MFC0)
+    TODO(CFC0)
+    case MTC0: {
+        int rt = (rest >> 16) & MASK(5);
+        int rd = (rest >> 11) & MASK(5);
+
+        /*
+         * Need to make register structure. Check out:
+         *     https://problemkaputt.de/psx-spx.htm#cop0registersummary
+         */
+
+        printf("\tMTC0: rt = %d; rd = %d\n", rt, rd);
+        die("todo");
+        break;
+    }
+    TODO(CTC0)
+    TODO(BC)
+    default:
+        die("cop0 unknown type %d", type);
+    }
+#undef TODO
+
+    die("bit %d type %x", (int)(bit ? 1 : 0), type);
 }
 
 
@@ -118,7 +165,7 @@ struct instruction instrs[64] = {
     I  (  0x0D,    "ORI",       op_ori      )
     J  (  0x0E,    "XORI",      todo        )
     I  (  0x0F,    "LUI",       op_lui      )
-    J  (  0x10,    "COP0",      todo        )
+    J  (  0x10,    "COP0",      op_cop0     )
     J  (  0x11,    "COP1",      todo        )
     J  (  0x12,    "COP2",      todo        )
     J  (  0x13,    "COP3",      todo        )

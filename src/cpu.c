@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "types.h"
-#include "macro.h"
+#include "utils.h"
 
 #include "cpu.h"
 #include "memory.h"
