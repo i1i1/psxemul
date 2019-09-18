@@ -15,7 +15,12 @@ struct cpu {
     u32 ir;
 };
 
+struct cop0 {
+    u32 r[32];
+};
+
 extern struct cpu cpu;
+extern struct cop0 cop0;
 
 
 void cpu_init(void);

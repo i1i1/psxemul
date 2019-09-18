@@ -14,3 +14,11 @@ all:
 test: all
 	./$(OUT) $(BIOS)
 
+$(SRC): untabify
+
+untabify:
+	@echo UNTABIFY
+	@awk '/\t/ {printf("%s:%d:%s\n", FILENAME, FNR, $$0); a=1} END{exit(a)}' $(SRC) $(HDR)
+
+.PHONY: untabify
+

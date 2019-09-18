@@ -128,8 +128,8 @@ op_cop0(u32 rest)
          *     https://problemkaputt.de/psx-spx.htm#cop0registersummary
          */
 
+        cop0.r[rt] = cpu.r[rd];
         printf("\tMTC0: rt = %d; rd = %d\n", rt, rd);
-        die("todo");
         break;
     }
     TODO(CTC0)
@@ -138,10 +138,15 @@ op_cop0(u32 rest)
         die("cop0 unknown type %d", type);
     }
 #undef TODO
-
-    die("bit %d type %x", (int)(bit ? 1 : 0), type);
 }
 
+static void
+op_bne(u8 rs, u8 rt, u16 imm)
+{
+    if (cpu.r[rs] != cpu.r[rt]) {
+        cpu.pc += (imm << 2) - 4;
+    }
+}
 
 
 struct instruction instrs[64] = {
@@ -154,7 +159,7 @@ struct instruction instrs[64] = {
     J  (  0x02,    "J",         op_j        )
     J  (  0x03,    "JAL",       todo        )
     J  (  0x04,    "BEQ",       todo        )
-    J  (  0x05,    "BNE",       todo        )
+    I  (  0x05,    "BNE",       op_bne      )
     J  (  0x06,    "BLEZ",      todo        )
     J  (  0x07,    "BGTZ",      todo        )
     J  (  0x08,    "ADDI",      todo        )

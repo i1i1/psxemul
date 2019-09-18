@@ -80,7 +80,7 @@ all: \$(OUT)
 #
 \$(OUT): \$(OBJS)
 	@printf \$(PRINTF_FMT) LD \$(OUT)
-	\$(CC) \$(CFLAGS) -o \$(OUT) \$(OBJS) \$(LDFLAGS)
+	@\$(CC) \$(CFLAGS) -o \$(OUT) \$(OBJS) \$(LDFLAGS)
 
 ########################
 $(dirs_gen $dirs)

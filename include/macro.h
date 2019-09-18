@@ -15,7 +15,7 @@
 
 #define BIT(n) (1ul << (n))
 #define MASK(n) (BIT(n)-1ul)
-#define MASK_BITS(f, t) (MASK(f-t) << t)
+#define MASK_BITS(f, t) (MASK((f)-(t)) << (t))
 #define IS_ALIGNED(n, b) (!((n) & MASK(b)))
 #define ROUND_DOWN(n, b) (((n) >> (b)) << (b))
 #define ROUND_UP(n, b) (((((n) - 1ul) >> (b)) + 1ul) << (b))
